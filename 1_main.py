@@ -1,15 +1,42 @@
 #202410111303
 #3331592296@qq.com
 #余洋
-def calculate_sum(nums):
-    while len(nums)>1:
-        new_nums=[(nums[i] + nums[i+1]) % 10 for i in range(len(nums)-1)]
-        nums=new_nums
-    return nums[0]
+def print_chess(chess):
+    for solution in chess:
+        for line in solution:
+            print(line,end="")
+        print()
+    print()
 
-input_nums=input("")
-nums=list(map(int,input_nums.split(',')))
+def is_safe(board,row,arr,n):
+    for i in range(row):
+        if board[i][arr]=='Q':
+            return False
+    for i,j in zip(range(row,-1,-1),range(arr,-1,-1)):
+        if board[i][j]=='Q':
+            return False
+    for i,j in zip(range(row,-1,-1),range(arr,n)):
+        if board[i][j]=='Q':
+            return False
+    return True
 
-result=calculate_sum(nums)
+def place_queens_util(board,row,n,chess):
+    if row==n:
+        solution=[''.join(row) for row in board]
+        chess.append(solution)
+        return    
+    for arr in range(n):
+        if is_safe(board,row,arr,n):
+            board[row][arr]='Q'
+            place_queens_util(board,row+1,n,chess )
+            board[row][arr]='.'
 
-print(result)
+def place_queens(n):
+    board=[[',' for _ in range(n)]for _ in range(n)]
+    chess=[]
+    place_queens_util(board,0,n,chess)
+    return chess
+
+input_n=int(input(""))
+chess=place_queens(input_n)
+print_chess(chess)
